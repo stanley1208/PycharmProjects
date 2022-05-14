@@ -63,8 +63,8 @@ terminate
 
 EX5.
 我們每當說算法X的效率要高於Y時指的是? 時間複雜度
-X: o(log n)>Y:O(n)
-X: o(n log n)>Y:O(n^2)
+X: O(log n)>Y:O(n)
+X: O(n log n)>Y:O(n^2)
 
 X實際的效率(秒)>Y實際的效率(秒) 不一定 !!!
 除非n足夠大
@@ -72,7 +72,7 @@ X實際的效率(秒)>Y實際的效率(秒) 不一定 !!!
 定理: if x的時間複雜度要優於y的時間複雜度，那麼，假設在一個足夠大的數M，當n>M時，
 我們可以保證x的實際效率要優於y的實際效率
 
-C*O(N)=o(N) if only if C跟N沒有相關性
+C*O(N)=O(N) if only if C跟N沒有相關性
 
 O(1) < O(log n) < O(n) < O(n^2) < O(n^3) < ... < O(2^n) < O(3^n) < .....
 O(log n):尋找一個element (從tree,heap),binary search
