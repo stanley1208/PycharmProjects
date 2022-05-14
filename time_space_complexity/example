@@ -75,6 +75,7 @@ X實際的效率(秒)>Y實際的效率(秒) 不一定 !!!
 C*O(N)=o(N) if only if C跟N沒有相關性
 
 O(1) < O(log n) < O(n) < O(n^2) < O(n^3) < ... < O(2^n) < O(3^n) < .....
+O(log n):尋找一個element (從tree,heap),binary search
 
 
 
