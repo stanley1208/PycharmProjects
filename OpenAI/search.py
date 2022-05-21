@@ -1,12 +1,13 @@
 import json
 import requests
 import os
+from api_key import key
 
-apiKey="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"
+
 
 headers={
     'Content-Type':'application/json',
-    'Authorization':'Bearer '+apiKey
+    'Authorization':'Bearer '+key
 }
 
 data=json.dumps({
