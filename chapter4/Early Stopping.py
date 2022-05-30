@@ -43,7 +43,7 @@ sgd_reg=SGDRegressor(max_iter=1,tol=-np.infty,warm_start=True,penalty=None,learn
 n_epochs=500
 train_errors,val_errors=[],[]
 for epoch in range(n_epochs):
-    sgd_reg.fit(X_train_poly_scaled,y_train)
+    sgd_reg.fit(X_train_poly_scaled,y_train)    # continues where it left off
     y_train_predict=sgd_reg.predict(X_train_poly_scaled)
     y_val_predict=sgd_reg.predict(X_val_poly_scaled)
     train_errors.append(mean_squared_error(y_train,y_train_predict))
