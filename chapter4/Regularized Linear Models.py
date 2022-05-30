@@ -55,13 +55,13 @@ def plot_model(model_class, polynomial, alphas, **model_kargs):
 # print(sgd_reg.predict([[1.5]]))
 
 # Lasso Regression
-# plt.plot(figsize=(8,4))
-# plt.subplot(121)
-# plot_model(Lasso,polynomial=False,alphas=(0,0.1,1),random_state=42)
-# plt.ylabel("$y$",rotation=0,fontsize=18)
-# plt.subplot(122)
-# plot_model(Lasso,polynomial=True,alphas=(0,10**-7,1),random_state=42)
-# plt.show()
+plt.plot(figsize=(8,4))
+plt.subplot(121)
+plot_model(Lasso,polynomial=False,alphas=(0,0.1,1),random_state=42)
+plt.ylabel("$y$",rotation=0,fontsize=18)
+plt.subplot(122)
+plot_model(Lasso,polynomial=True,alphas=(0,10**-7,1),random_state=42)
+plt.show()
 
 # lasso_reg=Lasso(alpha=0.1)
 # lasso_reg.fit(X,y)
