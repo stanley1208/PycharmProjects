@@ -2,6 +2,7 @@ import numpy as np
 from sklearn import datasets
 from sklearn.linear_model import LogisticRegression
 import matplotlib.pyplot as plt
+from matplotlib.colors import ListedColormap
 # t = np.linspace(-10, 10, 100)
 # sig = 1 / (1 + np.exp(-t))
 # plt.figure(figsize=(9, 6))
@@ -51,38 +52,79 @@ decision_boundary=X_new[y_proba[:,1]>=0.5][0]
 # print(decision_boundary)
 # print(log_reg.predict([[1.7],[1.5]]))
 
-X=iris["data"][:,(2,3)] # petal length, petal width
-y=(iris["target"]==2).astype(np.int)  # 1 if Iris virginica, else 0
 
-log_reg=LogisticRegression(solver="lbfgs",C=10**10,random_state=42)
-log_reg.fit(X,y)
+# Softmax Regression
+# X=iris["data"][:,(2,3)] # petal length, petal width
+# y=(iris["target"]==2).astype(np.int)  # 1 if Iris virginica, else 0
+#
+# log_reg=LogisticRegression(solver="lbfgs",C=10**10,random_state=42)
+# log_reg.fit(X,y)
+#
+# x0,x1=np.meshgrid(
+#     np.linspace(2.9,7,500).reshape(-1,1),
+#     np.linspace(0.8,2.7,200).reshape(-1,1),
+# )
+#
+# X_new=np.c_[x0.ravel(),x1.ravel()]
+# y_proba=log_reg.predict_proba(X_new)
+#
+# plt.figure(figsize=(10,6))
+# plt.plot(X[y==0,0],X[y==0,1],"bs")
+# plt.plot(X[y==1,0],X[y==1,1],"g^")
+#
+# zz=y_proba[:,1].reshape(x0.shape)
+# contour=plt.contour(x0,x1,zz,cmap=plt.cm.brg)
+#
+# left_right=np.array([2.9,7])
+# boundary = -(log_reg.coef_[0][0] * left_right + log_reg.intercept_[0]) / log_reg.coef_[0][1]
+#
+# plt.clabel(contour,inline=1,fontsize=12)
+# plt.plot(left_right,boundary,"k--",linewidth=3)
+# plt.text(3.5,1.5,"Not Iris virginica",fontsize=14,color="b",ha="center")
+# plt.text(6.5,2.3,"Iris virginica",fontsize=14,color="g",ha="center")
+# plt.xlabel("Patel length",fontsize=14)
+# plt.ylabel("Patel width",fontsize=14)
+# plt.axis([2.9,7,0.8,2.7])
+# plt.show()
+
+X=iris["data"][:,(2,3)] # petal length, petal width
+y=iris["target"]
+
+softmax_reg=LogisticRegression(multi_class="multinomial",solver="lbfgs",C=10,random_state=42)
+softmax_reg.fit(X,y)
 
 x0,x1=np.meshgrid(
-    np.linspace(2.9,7,500).reshape(-1,1),
-    np.linspace(0.8,2.7,200).reshape(-1,1),
+    np.linspace(0,8,500).reshape(-1,1),
+    np.linspace(0,3.5,200).reshape(-1,1),
 )
 
 X_new=np.c_[x0.ravel(),x1.ravel()]
-y_proba=log_reg.predict_proba(X_new)
+
+y_proba=softmax_reg.predict_proba(X_new)
+y_predict=softmax_reg.predict(X_new)
+
+zz1=y_proba[:,1].reshape(x0.shape)
+zz=y_predict.reshape(x0.shape)
 
 plt.figure(figsize=(10,6))
-plt.plot(X[y==0,0],X[y==0,1],"bs")
-plt.plot(X[y==1,0],X[y==1,1],"g^")
+plt.plot(X[y==2,0],X[y==2,1],"g^",label="Iris virginica")
+plt.plot(X[y==1,0],X[y==1,1],"bs",label="Iris versicolor")
+plt.plot(X[y==0,0],X[y==0,1],"yo",label="Iris setosa")
 
-zz=y_proba[:,1].reshape(x0.shape)
-contour=plt.contour(x0,x1,zz,cmap=plt.cm.brg)
+custom_cmap=ListedColormap(['#fafab0','#9898ff','#a0faa0'])
 
-left_right=np.array([2.9,7])
-boundary = -(log_reg.coef_[0][0] * left_right + log_reg.intercept_[0]) / log_reg.coef_[0][1]
-
+plt.contourf(x0,x1,zz,cmap=custom_cmap)
+contour=plt.contour(x0,x1,zz1,cmap=plt.cm.brg)
 plt.clabel(contour,inline=1,fontsize=12)
-plt.plot(left_right,boundary,"k--",linewidth=3)
-plt.text(3.5,1.5,"Not Iris virginica",fontsize=14,color="b",ha="center")
-plt.text(6.5,2.3,"Iris virginica",fontsize=14,color="g",ha="center")
 plt.xlabel("Patel length",fontsize=14)
 plt.ylabel("Patel width",fontsize=14)
-plt.axis([2.9,7,0.8,2.7])
+plt.legend(loc="best",fontsize=14)
+plt.axis([0,8,0,3.5])
 plt.show()
+
+print(softmax_reg.predict([[4,2]]))
+print(softmax_reg.predict_proba([[1,2]]))
+
 
 
 
