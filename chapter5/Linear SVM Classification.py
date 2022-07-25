@@ -2,6 +2,7 @@ import numpy as np
 from sklearn.svm import SVC
 from sklearn import datasets
 import matplotlib.pyplot as plt
+from sklearn.preprocessing import StandardScaler
 
 iris=datasets.load_iris()
 X=iris["data"][:,(2,3)] # petal length, petal width
@@ -40,24 +41,62 @@ def plot_svc_decision_boundary(svm_clf,xmin,xmax):
     plt.plot(x0, gutter_up, "k--", linewidth=2)
     plt.plot(x0, gutter_down, "k--", linewidth=2)
 
-fig,axes=plt.subplots(ncols=2,figsize=(10,5),sharey=True)
+# fig,axes=plt.subplots(ncols=2,figsize=(10,5),sharey=True)
+#
+# plt.sca(axes[0])
+# plt.plot(x0,pred_1,"g--",linewidth=2)
+# plt.plot(x0,pred_2,"m-",linewidth=2)
+# plt.plot(x0,pred_3,"r-",linewidth=2)
+# plt.plot(X[:,0][y==1],X[:,1][y==1],"bs",label="Iris versicolor")
+# plt.plot(X[:,0][y==0],X[:,1][y==0],"yo",label="Iris setosa")
+# plt.xlabel("Patel length",fontsize=14)
+# plt.ylabel("Patel width",fontsize=14)
+# plt.legend(loc="best",fontsize=14)
+# plt.axis([0,5.5,0,2])
+#
+# plt.sca(axes[1])
+# plot_svc_decision_boundary(svm_clf,0,5.5)
+# plt.plot(X[:,0][y==1],X[:,1][y==1],"bs")
+# plt.plot(X[:,0][y==0],X[:,1][y==0],"yo")
+# plt.xlabel("Patel length",fontsize=14)
+# plt.axis([0,5.5,0,2])
+#
+# plt.show()
 
-plt.sca(axes[0])
-plt.plot(x0,pred_1,"g--",linewidth=2)
-plt.plot(x0,pred_2,"m-",linewidth=2)
-plt.plot(x0,pred_3,"r-",linewidth=2)
-plt.plot(X[:,0][y==1],X[:,1][y==1],"bs",label="Iris versicolor")
-plt.plot(X[:,0][y==0],X[:,1][y==0],"yo",label="Iris setosa")
-plt.xlabel("Patel length",fontsize=14)
-plt.ylabel("Patel width",fontsize=14)
-plt.legend(loc="best",fontsize=14)
-plt.axis([0,5.5,0,2])
 
-plt.sca(axes[1])
-plot_svc_decision_boundary(svm_clf,0,5.5)
-plt.plot(X[:,0][y==1],X[:,1][y==1],"bs")
-plt.plot(X[:,0][y==0],X[:,1][y==0],"yo")
-plt.xlabel("Patel length",fontsize=14)
-plt.axis([0,5.5,0,2])
+Xs=np.array([[1,50],
+             [5,20],
+             [3,80],
+             [5,60]]).astype(np.float64)
+ys=np.array([0,0,1,1])
+svm_clf=SVC(kernel="linear",C=100)
+svm_clf.fit(Xs,ys)
+
+plt.figure(figsize=(10,5))
+plt.subplot(121)
+plt.plot(Xs[:,0][ys==1],Xs[:,1][ys==1],"bo")
+plt.plot(Xs[:,0][ys==1],Xs[:,1][ys==0],"ms")
+plot_svc_decision_boundary(svm_clf,0,6)
+plt.xlabel("$x_0$",fontsize=20)
+plt.ylabel("$x_1$",fontsize=20,rotation=0)
+plt.title("Unscaled",fontsize=16)
+plt.axis([0,6,0,90])
+
+scalar=StandardScaler()
+X_scaled=scalar.fit_transform(Xs)
+svm_clf.fit(X_scaled,ys)
+
+plt.subplot(122)
+plt.plot(Xs[:,0][ys==1],X_scaled[:,1][ys==1],"bo")
+plt.plot(Xs[:,0][ys==1],X_scaled[:,1][ys==0],"ms")
+plot_svc_decision_boundary(svm_clf,-2,2)
+plt.xlabel("$x'_0$",fontsize=20)
+plt.ylabel("$x'_1$",fontsize=20,rotation=0)
+plt.title("Scaled",fontsize=16)
+plt.axis([-2,2,-2,2])
 
 plt.show()
+
+
+
+
