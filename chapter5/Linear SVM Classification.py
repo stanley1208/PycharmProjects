@@ -72,30 +72,75 @@ ys=np.array([0,0,1,1])
 svm_clf=SVC(kernel="linear",C=100)
 svm_clf.fit(Xs,ys)
 
-plt.figure(figsize=(10,5))
-plt.subplot(121)
-plt.plot(Xs[:,0][ys==1],Xs[:,1][ys==1],"bo")
-plt.plot(Xs[:,0][ys==1],Xs[:,1][ys==0],"ms")
-plot_svc_decision_boundary(svm_clf,0,6)
-plt.xlabel("$x_0$",fontsize=20)
-plt.ylabel("$x_1$",fontsize=20,rotation=0)
-plt.title("Unscaled",fontsize=16)
-plt.axis([0,6,0,90])
+# plt.figure(figsize=(10,5))
+# plt.subplot(121)
+# plt.plot(Xs[:,0][ys==1],Xs[:,1][ys==1],"bo")
+# plt.plot(Xs[:,0][ys==1],Xs[:,1][ys==0],"ms")
+# plot_svc_decision_boundary(svm_clf,0,6)
+# plt.xlabel("$x_0$",fontsize=20)
+# plt.ylabel("$x_1$",fontsize=20,rotation=0)
+# plt.title("Unscaled",fontsize=16)
+# plt.axis([0,6,0,90])
+#
+# scalar=StandardScaler()
+# X_scaled=scalar.fit_transform(Xs)
+# svm_clf.fit(X_scaled,ys)
+#
+# plt.subplot(122)
+# plt.plot(Xs[:,0][ys==1],X_scaled[:,1][ys==1],"bo")
+# plt.plot(Xs[:,0][ys==1],X_scaled[:,1][ys==0],"ms")
+# plot_svc_decision_boundary(svm_clf,-2,2)
+# plt.xlabel("$x'_0$",fontsize=20)
+# plt.ylabel("$x'_1$",fontsize=20,rotation=0)
+# plt.title("Scaled",fontsize=16)
+# plt.axis([-2,2,-2,2])
+#
+# plt.show()
 
-scalar=StandardScaler()
-X_scaled=scalar.fit_transform(Xs)
-svm_clf.fit(X_scaled,ys)
+# Soft Margin Classification
+X_outliers=np.array([[3.4,1.3],
+                     [3.2,0.8]])
+y_outliers=np.array([0,0])
+Xo1=np.concatenate([X,X_outliers[:1]],axis=0)
+yo1=np.concatenate([y,y_outliers[:1]],axis=0)
+Xo2=np.concatenate([X,X_outliers[1:]],axis=0)
+yo2=np.concatenate([y,y_outliers[1:]],axis=0)
 
-plt.subplot(122)
-plt.plot(Xs[:,0][ys==1],X_scaled[:,1][ys==1],"bo")
-plt.plot(Xs[:,0][ys==1],X_scaled[:,1][ys==0],"ms")
-plot_svc_decision_boundary(svm_clf,-2,2)
-plt.xlabel("$x'_0$",fontsize=20)
-plt.ylabel("$x'_1$",fontsize=20,rotation=0)
-plt.title("Scaled",fontsize=16)
-plt.axis([-2,2,-2,2])
+
+svm_clf2=SVC(kernel="linear",C=10**9)
+svm_clf2.fit(Xo2,yo2)
+
+fig,axes=plt.subplots(ncols=2,figsize=(10,2.7),sharey=True)
+
+plt.sca(axes[0])
+plt.plot(Xo1[:,0][yo1==1],Xo1[:,1][yo1==1],"bs")
+plt.plot(Xo1[:,0][yo1==0],Xo1[:,1][yo1==0],"yo")
+plt.text(0.3,1.0,"Impossible!",fontsize=24,color="red")
+plt.xlabel("Patel length",fontsize=14)
+plt.ylabel("Patel width",fontsize=14)
+plt.annotate("Outlier",
+             xy=(X_outliers[0][0],X_outliers[0][1]),
+             ha="center",
+             arrowprops=dict(facecolor='black',shrink=0.1),
+             fontsize=16)
+plt.axis([0,5.5,0,2])
+
+plt.sca(axes[1])
+plt.plot(Xo2[:,0][yo2==1],Xo2[:,1][yo2==1],"bs")
+plt.plot(Xo2[:,0][yo2==0],Xo2[:,1][yo2==0],"yo")
+plot_svc_decision_boundary(svm_clf2,0,5.5)
+plt.xlabel("Patel length",fontsize=14)
+plt.annotate("Outlier",
+             xy=(X_outliers[1][0],X_outliers[1][1]),
+             xytext=(3.2,0.08),
+             ha="center",
+             arrowprops=dict(facecolor='black',shrink=0.1),
+             fontsize=16)
+plt.axis([0,5.5,0,2])
+
 
 plt.show()
+
 
 
 
